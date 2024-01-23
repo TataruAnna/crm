@@ -1,4 +1,4 @@
-package com.sales.crm.GlobalExceptionHandler;
+package com.sales.crm.config;
 
 import com.sales.crm.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
