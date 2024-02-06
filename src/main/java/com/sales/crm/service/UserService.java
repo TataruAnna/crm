@@ -59,9 +59,20 @@ public class UserService {
         User user = new User();
         user.setName(authRequestDTO.getUsername());
         user.setPass(passwordEncoder.encode(authRequestDTO.getPassword()));
-        Role role = roleRepository.findByRoleType(RoleType.ROLE_SALES);
+        Role role = roleRepository.findByRoleType(RoleType.ROLE_SALES).orElseThrow(()->new ResourceNotFoundException("role not found"));
         user.getRoles().add(role);
         role.getUsers().add(user);
         return userRepository.save(user);
+    }
+    @Transactional
+    public Role addRoleToUser(Long userId, RoleType roleType){
+        User user = userRepository.findUserById(userId).orElseThrow(()->new ResourceNotFoundException("user not found"));
+        Role role = roleRepository.findByRoleType(roleType).orElseThrow(()->new ResourceNotFoundException("role not found"));
+
+        // daca rolul exista il adaug la lista de useri si il salvez
+        role.getUsers().add(user);
+        // Updatez lista de roluri a userului
+        user.getRoles().add(role);
+        return roleRepository.save(role);
     }
 }

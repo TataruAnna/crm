@@ -3,6 +3,7 @@ package com.sales.crm.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -49,6 +50,9 @@ public class Role {
     }
 
     public Set<User> getUsers() {
+        if(users==null){
+            users=new HashSet<>();
+        }
         return users;
     }
 

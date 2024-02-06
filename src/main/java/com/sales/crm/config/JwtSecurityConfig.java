@@ -38,7 +38,12 @@ public class JwtSecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/authenticate").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/product/**").hasRole("ADMIN")
+                                .requestMatchers("/register").permitAll()
+                                .requestMatchers("/client").permitAll()
+                                .requestMatchers("/category").permitAll()
+                                .requestMatchers("/supplier").permitAll()
+                                .requestMatchers("/product").permitAll()
+                        //.requestMatchers(HttpMethod.POST, "/product/**").hasRole("ADMIN")
                                 .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)

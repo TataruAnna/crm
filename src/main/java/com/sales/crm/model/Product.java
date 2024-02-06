@@ -17,13 +17,13 @@ public class Product {
     @Column
     private String description;
     @Column
-    private double buyingPrice;
+    private Double buyingPrice;
     @Column
-    private boolean isSpecialProduct;
+    private Boolean isSpecialProduct;
 //    @Column
 //    private double sellingMargin;
     @Column
-    private int stockNumber; // nu toate produsele sunt cu stoc
+    private Integer stockNumber; // nu toate produsele sunt cu stoc
 
     @ManyToOne
     @JsonBackReference("category-product")
@@ -42,7 +42,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(Long id, String productCode, String description, double buyingPrice, boolean isSpecialProduct, int stockNumber, Category category, Supplier supplier, List<QuotationItem> quotationItems) {
+    public Product(Long id, String productCode, String description, Double buyingPrice, Boolean isSpecialProduct, Integer stockNumber, Category category, Supplier supplier, List<QuotationItem> quotationItems) {
         this.id = id;
         this.productCode = productCode;
         this.description = description;
@@ -78,27 +78,27 @@ public class Product {
         this.description = description;
     }
 
-    public double getBuyingPrice() {
+    public Double getBuyingPrice() {
         return buyingPrice;
     }
 
-    public void setBuyingPrice(double buyingPrice) {
+    public void setBuyingPrice(Double buyingPrice) {
         this.buyingPrice = buyingPrice;
     }
 
-    public boolean isSpecialProduct() {
+    public Boolean isSpecialProduct() {
         return isSpecialProduct;
     }
 
-    public void setSpecialProduct(boolean specialProduct) {
+    public void setSpecialProduct(Boolean specialProduct) {
         isSpecialProduct = specialProduct;
     }
 
-    public int getStockNumber() {
+    public Integer getStockNumber() {
         return stockNumber;
     }
 
-    public void setStockNumber(int stockNumber) {
+    public void setStockNumber(Integer stockNumber) {
         this.stockNumber = stockNumber;
     }
 

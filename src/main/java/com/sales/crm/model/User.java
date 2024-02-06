@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -27,7 +28,7 @@ public class User {
     private List<Client> clients;
 
     @ManyToMany(mappedBy ="users",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JsonManagedReference("users-roles")
+    @JsonBackReference("users-roles")
     private Set<Role> roles;
 
     @OneToMany(mappedBy = "user",  cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
@@ -94,6 +95,9 @@ public class User {
     }
 
     public Set<Role> getRoles() {
+        if(roles==null){
+            roles = new HashSet<>();
+        }
         return roles;
     }
 

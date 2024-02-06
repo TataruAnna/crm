@@ -3,6 +3,7 @@ package com.sales.crm.model;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -55,6 +56,9 @@ public class Supplier {
     }
 
     public List<Product> getProducts() {
+        if(products == null){
+            products = new ArrayList<>();
+        }
         return products;
     }
 
