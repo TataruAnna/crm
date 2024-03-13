@@ -55,4 +55,8 @@ public class ClientRequestDTO {
     public void setUserId(Long userId) {
         this.userId = userId;
     }
+
+    public static class OrderResponseDTO {
+
+    }
 }

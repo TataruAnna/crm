@@ -9,12 +9,19 @@ public class QuotationItem {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
+
     @Column
-    private Integer quantity;
+    private Double quantity;
+
+    @Column
+    private Double price;
+
     @ManyToOne
     @JoinColumn(name="product_id")
     @JsonBackReference("quotationItem-product")
     private Product product;
+
+
 
     @ManyToOne
     @JoinColumn(name="quotation_id")
@@ -26,11 +33,20 @@ public class QuotationItem {
     public QuotationItem() {
     }
 
-    public QuotationItem(Long id, Integer quantity, Product product, Quotation quotation) {
+    public QuotationItem(Long id, Product product, Quotation quotation, Double quantity, Double price) {
         this.id = id;
-        this.quantity = quantity;
         this.product = product;
         this.quotation = quotation;
+        this.quantity = quantity;
+        this.price = price;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
     public Long getId() {
@@ -39,14 +55,6 @@ public class QuotationItem {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
     }
 
     public Product getProduct() {
@@ -63,5 +71,13 @@ public class QuotationItem {
 
     public void setQuotation(Quotation quotation) {
         this.quotation = quotation;
+    }
+
+    public Double getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Double quantity) {
+        this.quantity = quantity;
     }
 }

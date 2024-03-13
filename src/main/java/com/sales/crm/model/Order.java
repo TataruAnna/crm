@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "orders")
@@ -23,9 +25,13 @@ public class Order {
     @JsonBackReference("order-client")
     private Client client;
 
-    @OneToMany(mappedBy = "order",  cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
-    @JsonManagedReference("order-user")
-    private List<User> users;
+    @ManyToMany
+    @JoinTable(
+            name = "user-order",
+            joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name="user_id")
+    )
+    private Set<User> users;
 
 
     //one-to-many cu quotation (o comanda poate sa contina una sau mai multe oferte de mobilier, de ex: bucatarie + dormitor)
@@ -45,7 +51,7 @@ public class Order {
     public Order() {
     }
 
-    public Order(Long id, String name, OrderStatus orderStatus, Client client, List<User> users, List<Quotation> quotations, List<OrderObservation> orderObservations) {
+    public Order(Long id, String name, OrderStatus orderStatus, Client client, Set<User> users, List<Quotation> quotations, List<OrderObservation> orderObservations) {
         this.id = id;
         this.name = name;
         this.orderStatus = orderStatus;
@@ -87,11 +93,14 @@ public class Order {
         this.client = client;
     }
 
-    public List<User> getUsers() {
+    public Set<User> getUsers() {
         return users;
     }
 
-    public void setUsers(List<User> users) {
+    public void setUsers(Set<User> users) {
+        if(users == null){
+            users = new HashSet<>();
+        }
         this.users = users;
     }
 

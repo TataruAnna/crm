@@ -1,18 +1,22 @@
 package com.sales.crm.controller;
 
 import com.sales.crm.dtos.AuthRequestDTO;
+import com.sales.crm.dtos.UserResponseDTO;
+import com.sales.crm.model.Category;
 import com.sales.crm.model.Role;
 import com.sales.crm.model.RoleType;
 import com.sales.crm.model.User;
 import com.sales.crm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
+@RequestMapping("/user")
 public class UserController {
 
     private UserService userService;
@@ -23,13 +27,25 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> register (@RequestBody AuthRequestDTO authRequestDTO){
-        return ResponseEntity.ok(userService.register(authRequestDTO));
+    public ResponseEntity<UserResponseDTO> register (@RequestBody AuthRequestDTO authRequestDTO){
+         return ResponseEntity.ok(userService.register(authRequestDTO));
     }
-    @PostMapping("/register/{userId}/{roleType}")
+    @PostMapping("/{userId}/{roleType}")
     public ResponseEntity<Role> addRoleToUser(@PathVariable Long userId, @PathVariable RoleType roleType){
         return ResponseEntity.ok(userService.addRoleToUser(userId, roleType));
     }
+    @PostMapping("/{userId}/")
+    public ResponseEntity<String> changeStatusOfUserById(@PathVariable Long userId, @RequestParam Boolean activeStatus){
+        return ResponseEntity.ok(userService.changeActiveStatus(userId,activeStatus));
+
+    }
+    @GetMapping("/all")
+    public ResponseEntity<List<UserResponseDTO>> findAll(){
+        return ResponseEntity.ok(userService.findAllUsers());
+
+    }
+
+
 
 
 

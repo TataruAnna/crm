@@ -1,10 +1,13 @@
 package com.sales.crm.service;
 
+import com.sales.crm.exceptions.ResourceNotFoundException;
 import com.sales.crm.model.Category;
 import com.sales.crm.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class CategoryService {
@@ -18,4 +21,24 @@ public class CategoryService {
     public Category addCategory(Category category) {
         return categoryRepository.save(category);
     }
+    @Transactional
+    public Category updateCategory(String name, Category category){
+        Category foundCategory = categoryRepository.findCategoryByName(name).orElseThrow(()-> new ResourceNotFoundException("categoria cu acest nume nu exista" ));
+        if(category.getDescription() != null){
+            foundCategory.setDescription(category.getDescription());
+        }
+        return categoryRepository.save(foundCategory);
+    }
+    @Transactional
+    public List<Category> findAll(){
+        return categoryRepository.findAll();
+    }
+
+    @Transactional
+    public List<Category> deleteCategoryById(Long categoryId){
+        Category category = categoryRepository.findById(categoryId).orElseThrow(()->new ResourceNotFoundException("Aceasta categorie nu exista"));
+        categoryRepository.delete(category);
+        return findAll();
+    }
+
 }
