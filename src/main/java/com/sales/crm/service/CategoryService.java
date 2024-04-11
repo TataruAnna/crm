@@ -23,7 +23,7 @@ public class CategoryService {
     }
     @Transactional
     public Category updateCategory(String name, Category category){
-        Category foundCategory = categoryRepository.findCategoryByName(name).orElseThrow(()-> new ResourceNotFoundException("categoria cu acest nume nu exista" ));
+        Category foundCategory = categoryRepository.findCategoryByName(name).orElseThrow(()-> new ResourceNotFoundException("This category doesn't exist" ));
         if(category.getDescription() != null){
             foundCategory.setDescription(category.getDescription());
         }
@@ -36,7 +36,7 @@ public class CategoryService {
 
     @Transactional
     public List<Category> deleteCategoryById(Long categoryId){
-        Category category = categoryRepository.findById(categoryId).orElseThrow(()->new ResourceNotFoundException("Aceasta categorie nu exista"));
+        Category category = categoryRepository.findById(categoryId).orElseThrow(()->new ResourceNotFoundException("This category doesn't exist"));
         categoryRepository.delete(category);
         return findAll();
     }

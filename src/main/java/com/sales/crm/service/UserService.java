@@ -105,7 +105,7 @@ public class UserService {
     }
     @Transactional
     public String changeActiveStatus(Long userId, Boolean status){
-        User user = userRepository.findUserById(userId).orElseThrow(()->new ResourceNotFoundException("user not found"));
+        User user = userRepository.findUserById(userId).orElseThrow(()->new ResourceNotFoundException("User not found"));
         user.setActive(status);
         userRepository.save(user);
         if(status){
@@ -113,6 +113,12 @@ public class UserService {
         }else
             return "User is INACTIVE now";
 
+    }
+    @Transactional
+    public String deleteUserById(Long userId){
+        User user = userRepository.findUserById(userId).orElseThrow(()->new ResourceNotFoundException("User not found"));
+        userRepository.delete(user);
+        return "User has been succesfully deleted";
     }
 
 

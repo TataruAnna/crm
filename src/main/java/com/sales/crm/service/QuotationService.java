@@ -1,5 +1,6 @@
 package com.sales.crm.service;
 
+import com.sales.crm.MapperService.QuotationMapper;
 import com.sales.crm.dtos.QuotationItemRequestDTO;
 import com.sales.crm.dtos.QuotationRequestDTO;
 import com.sales.crm.dtos.QuotationResponseDTO;
@@ -9,6 +10,7 @@ import com.sales.crm.repository.ClientRepository;
 import com.sales.crm.repository.ProductRepository;
 import com.sales.crm.repository.QuotationRepository;
 import com.sales.crm.repository.UserRepository;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.datetime.DateFormatter;
 import org.springframework.stereotype.Service;
@@ -17,60 +19,64 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class QuotationService {
 
     private QuotationRepository quotationRepository;
     private UserRepository userRepository;
+    private UserService userService;
     private ProductRepository productRepository;
     private ClientRepository clientRepository;
+    private QuotationMapper quotationMapper;
+    private PdfGenerationService pdfGenerationService;
+    private EmailService emailService;
 
     @Autowired
-    public QuotationService(QuotationRepository quotationRepository, UserRepository userRepository, ProductRepository productRepository, ClientRepository clientRepository) {
+    public QuotationService(QuotationRepository quotationRepository, UserRepository userRepository, ProductRepository productRepository, ClientRepository clientRepository, QuotationMapper quotationMapper,PdfGenerationService pdfGenerationService, EmailService emailService, UserService userService) {
         this.quotationRepository = quotationRepository;
         this.userRepository = userRepository;
         this.productRepository = productRepository;
         this.clientRepository = clientRepository;
+        this.quotationMapper = quotationMapper;
+        this.pdfGenerationService = pdfGenerationService;
+        this.emailService = emailService;
+        this.userService = userService;
     }
 
     @Transactional
-    public Quotation addQuotationToUser (QuotationRequestDTO quotationRequestDTO){
+    public QuotationResponseDTO addQuotationToUser (QuotationRequestDTO quotationRequestDTO) throws MessagingException {
 
-        //gasesc userul dupa id
-        //creez o noua comanda
-        //atasez comanda de utilizator
-        //salvez orderul
-        //salvez user-ul
-        User user = userRepository.findUserById(quotationRequestDTO.getUserId()).orElseThrow(()-> new ResourceNotFoundException("User not found in addQuotation"));
+        User user = userService.findLoggedInUser();
         Client client = clientRepository.findById(quotationRequestDTO.getClientId()).orElseThrow(()->new ResourceNotFoundException("client not found "));
-        Quotation quotation = new Quotation();
-        quotation.setUser(user);
-        quotation.setName(quotationRequestDTO.getName());
-        quotation.setSellingMargin(quotationRequestDTO.getSellingMargin());
-        quotation.setClient(client);
-        quotation.setDateCreated(LocalDateTime.now());
+        Quotation quotation = quotationMapper.mapFronRequestDTOtoQuotation(quotationRequestDTO,user, client);
 
         user.getQuotations().add(quotation);
-        return quotationRepository.save(quotation);
+        client.getQuotations().add(quotation);
+        quotationRepository.save(quotation);
 
+        pdfGenerationService.generatePdf("Quotation "+ quotation.getName() + " has been generated", "src/main/resources/quotation.pdf");
+        emailService.sendMessageWithAttachmentforQuotation(user.getName(),"Quotation generation", "This is an email with an attachment", "src/main/resources/quotation.pdf");
+
+        return quotationMapper.mapFromQuotationToDTOResponse(quotation);
 
     }
 
-    public QuotationResponseDTO mapFromQuotationToDTOResponse(Quotation quotation){
-        QuotationResponseDTO quotationResponseDTO = new QuotationResponseDTO();
-        quotationResponseDTO.setClientName(quotation.getClient().getName());
-        quotationResponseDTO.setSellingMargin(quotation.getSellingMargin());
-        quotationResponseDTO.setTotalPrice(quotation.getTotalPrice());
-        quotationResponseDTO.setDateCreated(quotation.getDateCreated());
-        quotationResponseDTO.setUserName(quotation.getUser().getName());
-        quotationResponseDTO.setClientName(quotation.getClient().getName());
-        return quotationResponseDTO;
+    @Transactional
+    public List<QuotationResponseDTO> getAllQuotations(String name){
+        Client client = clientRepository.findClientByName(name).orElseThrow(()->new ResourceNotFoundException("client name not found"));
+        List<Quotation> allQuotations = client.getQuotations();
+        return allQuotations.stream()
+                .map(quotation ->quotationMapper.mapFromQuotationToDTOResponse(quotation))
+                .collect(Collectors.toList());
 
-
-//        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
-//        LocalDateTime dateTime = LocalDateTime.parse(quotation.getDateCreated(), dtf);
     }
+
+
 
 
 }

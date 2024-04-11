@@ -2,6 +2,7 @@ package com.sales.crm.controller;
 
 import com.sales.crm.model.Category;
 import com.sales.crm.service.CategoryService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/category")
+@Tag(name = "Category", description = "Endpoints for category ")
 public class CategoryController {
     private CategoryService categoryService;
     @Autowired
@@ -18,14 +20,15 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
+    //TODO de acceptat ca paremetru un CategoryRequestDTO in loc de Category
     @PostMapping("/add")
-    private ResponseEntity<Category> addCategory (@RequestBody Category category){
+    public ResponseEntity<Category> addCategory (@RequestBody Category category){
         Category newCategory = categoryService.addCategory(category);
         return ResponseEntity.status(HttpStatus.CREATED).body(newCategory);
 
     }
     @PostMapping("/update")
-    private ResponseEntity<Category> updateCategory (@RequestParam String name, @RequestBody Category category){
+    public ResponseEntity<Category> updateCategory (@RequestParam String name, @RequestBody Category category){
         return ResponseEntity.ok(categoryService.updateCategory(name, category));
     }
 

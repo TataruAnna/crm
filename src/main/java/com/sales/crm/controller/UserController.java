@@ -7,6 +7,7 @@ import com.sales.crm.model.Role;
 import com.sales.crm.model.RoleType;
 import com.sales.crm.model.User;
 import com.sales.crm.service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/user")
+@Tag(name = "User", description = "Endpoints for users ")
 public class UserController {
 
     private UserService userService;
@@ -43,6 +45,10 @@ public class UserController {
     public ResponseEntity<List<UserResponseDTO>> findAll(){
         return ResponseEntity.ok(userService.findAllUsers());
 
+    }
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<String> deleteUserById(@PathVariable Long userId){
+        return ResponseEntity.ok(userService.deleteUserById(userId));
     }
 
 

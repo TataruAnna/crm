@@ -1,5 +1,6 @@
 package com.sales.crm.service;
 
+import com.sales.crm.MapperService.QuotationMapper;
 import com.sales.crm.dtos.ClientRequestDTO;
 import com.sales.crm.dtos.ClientResponseDTO;
 import com.sales.crm.dtos.ClientSimpleResponseDTO;
@@ -25,12 +26,14 @@ public class ClientService {
     private ClientRepository clientRepository;
     private UserRepository userRepository;
     private QuotationService quotationService;
+    private QuotationMapper quotationMapper;
 
     @Autowired
-    public ClientService(ClientRepository clientRepository, UserRepository userRepository, QuotationService quotationService) {
+    public ClientService(ClientRepository clientRepository, UserRepository userRepository, QuotationService quotationService, QuotationMapper quotationMapper) {
         this.clientRepository = clientRepository;
         this.userRepository = userRepository;
         this.quotationService = quotationService;
+        this.quotationMapper = quotationMapper;
     }
     @Transactional
     public Client addClientToUser (ClientRequestDTO clientRequestDTO){
@@ -52,7 +55,6 @@ public class ClientService {
         }
 
         client.setUser(user);
-        user.getClients().add(client);
         return client;
     }
     @Transactional
@@ -125,6 +127,8 @@ public class ClientService {
     //vizualizare client cu lista de cotatii +toate detaliile
     @Transactional
     public ClientResponseDTO mapFromClientToResponseDTO(Client client){
+
+        //TODO foloseste un mapper
         ClientResponseDTO clientResponseDTO = new ClientResponseDTO();
         clientResponseDTO.setName(client.getName());
         clientResponseDTO.setPhoneNumber(client.getPhoneNumber());
@@ -134,7 +138,7 @@ public class ClientService {
         List<Quotation> clientQuotations = client.getQuotations();
 
         clientResponseDTO.setQuotationResponseDTOs(clientQuotations.stream()
-                .map(quotation -> quotationService.mapFromQuotationToDTOResponse(quotation))
+                .map(quotation -> quotationMapper.mapFromQuotationToDTOResponse(quotation))
                 .collect(Collectors.toList()));
 
         return clientResponseDTO;
@@ -157,6 +161,7 @@ public class ClientService {
                 .filter(meeting -> meeting!=null )
                 .count();
     }
+    //TODO de pus in client mapper
     @Transactional
     public ClientSimpleResponseDTO mapFromClientToSimpleResponseDTO(Client client){
         ClientSimpleResponseDTO clientSimpleResponseDTO = new ClientSimpleResponseDTO();
