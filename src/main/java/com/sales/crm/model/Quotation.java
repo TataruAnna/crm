@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 //OFERTA
 @Entity
@@ -72,10 +73,14 @@ public class Quotation {
     }
 
     public double getTotalPrice() {
+        if(totalPrice == null){
+           totalPrice = 0.0;
+        }
         return totalPrice;
     }
 
     public void setTotalPrice(Double totalPrice) {
+
         this.totalPrice = totalPrice;
     }
 
@@ -128,6 +133,9 @@ public class Quotation {
     }
 
     public List<QuotationItem> getQuotationItems() {
+        if(quotationItems == null){
+            quotationItems = new ArrayList<>();
+        }
         return quotationItems;
     }
 

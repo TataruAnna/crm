@@ -64,13 +64,14 @@ public class User {
     }
 
     public List<Quotation> getQuotations() {
+        if(quotations == null){
+            quotations = new ArrayList<>();
+        }
         return quotations;
     }
 
     public void setQuotations(List<Quotation> quotations) {
-        if(quotations == null){
-            quotations = new ArrayList<>();
-        }
+
         this.quotations = quotations;
     }
 

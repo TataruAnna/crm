@@ -64,14 +64,14 @@ public class UserService {
         Optional<User> userOptional = userRepository.findUserByName(authRequestDTO.getUsername());
 
         if (userOptional.isPresent()){
-            throw new ResourceNotFoundException("already exists");
+            throw new ResourceNotFoundException("Already exists");
         }
         User user = new User();
         user.setName(authRequestDTO.getUsername());
         user.setActive(true);
         user.setPass(passwordEncoder.encode(authRequestDTO.getPassword()));
-        user.setEmail(authRequestDTO.getEmail());
-        Role role = roleRepository.findByRoleType(RoleType.ROLE_SALES).orElseThrow(()->new ResourceNotFoundException("role not found"));
+
+        Role role = roleRepository.findByRoleType(RoleType.ROLE_SALES).orElseThrow(()->new ResourceNotFoundException("Role not found"));
         user.getRoles().add(role);
         role.getUsers().add(user);
         userRepository.save(user);
@@ -80,8 +80,8 @@ public class UserService {
     }
     @Transactional
     public Role addRoleToUser(Long userId, RoleType roleType){
-        User user = userRepository.findUserById(userId).orElseThrow(()->new ResourceNotFoundException("user not found"));
-        Role role = roleRepository.findByRoleType(roleType).orElseThrow(()->new ResourceNotFoundException("role not found"));
+        User user = userRepository.findUserById(userId).orElseThrow(()->new ResourceNotFoundException("User not found"));
+        Role role = roleRepository.findByRoleType(roleType).orElseThrow(()->new ResourceNotFoundException("Role not found"));
 
         // daca rolul exista il adaug la lista de useri si il salvez
         role.getUsers().add(user);
@@ -92,7 +92,7 @@ public class UserService {
     @Transactional
     public User findLoggedInUser() {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User foundUser = userRepository.findUserByName(userDetails.getUsername()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found"));
+        User foundUser = userRepository.findUserByName(userDetails.getUsername()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
         return foundUser;
     }
     @Transactional
@@ -113,13 +113,7 @@ public class UserService {
         }else
             return "User is INACTIVE now";
 
-    }
-    @Transactional
-    public String deleteUserById(Long userId){
-        User user = userRepository.findUserById(userId).orElseThrow(()->new ResourceNotFoundException("User not found"));
-        userRepository.delete(user);
-        return "User has been succesfully deleted";
-    }
+    } // pentru a nu face delete la un parent
 
 
 }

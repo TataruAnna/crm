@@ -1,5 +1,6 @@
 package com.sales.crm.controller;
 
+import com.sales.crm.dtos.SupplierDTO;
 import com.sales.crm.model.Supplier;
 import com.sales.crm.service.SupplierService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -7,10 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/supplier")
@@ -23,8 +23,24 @@ public class SupplierController {
     }
 
     @PostMapping("/add")
-    private ResponseEntity<Supplier> addSupplier(@RequestBody Supplier supplier){
-        Supplier newSupplier = supplierService.addSupplier(supplier);
+    public ResponseEntity<SupplierDTO> addSupplier(@RequestBody SupplierDTO supplierDTO){
+        SupplierDTO newSupplier = supplierService.addSupplier(supplierDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(newSupplier);
     }
+    @PostMapping("/update/{supplierId}")
+    public ResponseEntity<SupplierDTO> updateSupplier(@RequestBody SupplierDTO supplierDTO, @PathVariable Long supplierId){
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(supplierService.updateSupplier(supplierDTO, supplierId));
+
+    }
+    @GetMapping("/all")
+    public ResponseEntity<List<SupplierDTO>> getAllSuppliers() {
+        return ResponseEntity.ok(supplierService.getAllSuppliers());
+    }
+    @DeleteMapping("/delete/{supplierId}")
+    public ResponseEntity<List<SupplierDTO>> deleteSupplier(@PathVariable Long supplierId){
+        return ResponseEntity.ok(supplierService.deleteSupplier(supplierId));
+    }
+
+
 }

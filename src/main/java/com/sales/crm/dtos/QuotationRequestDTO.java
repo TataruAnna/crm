@@ -1,5 +1,6 @@
 package com.sales.crm.dtos;
 
+
 public class QuotationRequestDTO {
     private String name;
     private double sellingMargin;
@@ -7,6 +8,9 @@ public class QuotationRequestDTO {
 
     private Long clientId;
     private Long userId; //de refactorizat cu metoda findUserLoggedIn
+
+    public QuotationRequestDTO() {
+    }
 
     public QuotationRequestDTO(String name, double sellingMargin, Long orderId, Long clientId, Long userId) {
         this.name = name;

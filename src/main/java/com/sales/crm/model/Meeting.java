@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 @Entity
 @Table(name = "meeting")
@@ -71,6 +72,9 @@ public class Meeting {
     }
 
     public List<MeetingObservation> getMeetingObservations() {
+        if(meetingObservations == null){
+            meetingObservations = new ArrayList<>();
+        }
         return meetingObservations;
     }
 

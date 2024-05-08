@@ -1,5 +1,6 @@
 package com.sales.crm.dtos;
 
+
 public class QuotationItemResponseDTO {
     private String productName;
     private Double price;

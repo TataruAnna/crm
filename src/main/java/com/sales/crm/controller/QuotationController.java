@@ -1,7 +1,10 @@
 package com.sales.crm.controller;
 
+import com.sales.crm.dtos.QuotationItemRequestDTO;
+import com.sales.crm.dtos.QuotationItemResponseDTO;
 import com.sales.crm.dtos.QuotationRequestDTO;
 import com.sales.crm.dtos.QuotationResponseDTO;
+import com.sales.crm.service.QuotationItemService;
 import com.sales.crm.service.QuotationService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;
@@ -19,9 +22,13 @@ import java.util.List;
 public class QuotationController {
 
     private QuotationService quotationService;
+
+    private QuotationItemService quotationItemService;
+
     @Autowired
-    public QuotationController(QuotationService quotationService) {
+    public QuotationController(QuotationService quotationService, QuotationItemService quotationItemService) {
         this.quotationService = quotationService;
+        this.quotationItemService = quotationItemService;
     }
 
     @PostMapping("/add")
@@ -38,6 +45,19 @@ public class QuotationController {
         return ResponseEntity.ok(quotationService.getAllQuotations(name));
 
     }
+    @GetMapping("/all/{userId}")
+    public ResponseEntity<List<QuotationResponseDTO>> getAllQuotationsFromUser(@PathVariable Long userId){
+        return ResponseEntity.ok(quotationService.getAllQuotationsFromUser(userId));
+    }
+
+    @PostMapping("/addItem")
+    public ResponseEntity<QuotationItemResponseDTO> addQuotationItemToQuotation(@RequestBody QuotationItemRequestDTO quotationItemRequestDTO){
+        return  ResponseEntity.ok(quotationItemService.addQuotationItemToQuotation(quotationItemRequestDTO));
+    }
+
+
+
+
 
 
 }

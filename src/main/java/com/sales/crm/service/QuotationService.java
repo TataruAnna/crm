@@ -30,17 +30,15 @@ public class QuotationService {
     private QuotationRepository quotationRepository;
     private UserRepository userRepository;
     private UserService userService;
-    private ProductRepository productRepository;
     private ClientRepository clientRepository;
     private QuotationMapper quotationMapper;
     private PdfGenerationService pdfGenerationService;
     private EmailService emailService;
 
     @Autowired
-    public QuotationService(QuotationRepository quotationRepository, UserRepository userRepository, ProductRepository productRepository, ClientRepository clientRepository, QuotationMapper quotationMapper,PdfGenerationService pdfGenerationService, EmailService emailService, UserService userService) {
+    public QuotationService(QuotationRepository quotationRepository, UserRepository userRepository, ClientRepository clientRepository, QuotationMapper quotationMapper,PdfGenerationService pdfGenerationService, EmailService emailService, UserService userService) {
         this.quotationRepository = quotationRepository;
         this.userRepository = userRepository;
-        this.productRepository = productRepository;
         this.clientRepository = clientRepository;
         this.quotationMapper = quotationMapper;
         this.pdfGenerationService = pdfGenerationService;
@@ -54,13 +52,14 @@ public class QuotationService {
         User user = userService.findLoggedInUser();
         Client client = clientRepository.findById(quotationRequestDTO.getClientId()).orElseThrow(()->new ResourceNotFoundException("client not found "));
         Quotation quotation = quotationMapper.mapFronRequestDTOtoQuotation(quotationRequestDTO,user, client);
-
+        quotation.setClient(client);
+        quotation.setUser(user);
         user.getQuotations().add(quotation);
         client.getQuotations().add(quotation);
         quotationRepository.save(quotation);
-
-        pdfGenerationService.generatePdf("Quotation "+ quotation.getName() + " has been generated", "src/main/resources/quotation.pdf");
-        emailService.sendMessageWithAttachmentforQuotation(user.getName(),"Quotation generation", "This is an email with an attachment", "src/main/resources/quotation.pdf");
+        //TODO de creat cotatia cu elemetele din ea
+        pdfGenerationService.generatePdf("Quotation "+ quotation.getName() +" has been generated", "src/main/resources/quotation.pdf");
+        emailService.sendMessageWithAttachmentforQuotation(user.getEmail(),"Quotation generation", "Your quotation is here!", "src/main/resources/quotation.pdf");
 
         return quotationMapper.mapFromQuotationToDTOResponse(quotation);
 
@@ -74,6 +73,14 @@ public class QuotationService {
                 .map(quotation ->quotationMapper.mapFromQuotationToDTOResponse(quotation))
                 .collect(Collectors.toList());
 
+    }
+    @Transactional
+    public List<QuotationResponseDTO>getAllQuotationsFromUser(Long userId){
+        User user = userRepository.findUserById(userId).orElseThrow(()->new ResourceNotFoundException("User not found"));
+        List<Quotation> allUserQuotations = user.getQuotations();
+        return allUserQuotations.stream()
+                .map(quotation ->quotationMapper.mapFromQuotationToDTOResponse(quotation))
+                .collect(Collectors.toList());
     }
 
 

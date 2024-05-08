@@ -2,6 +2,7 @@ package com.sales.crm.dtos;
 
 import com.sales.crm.model.RoleType;
 
+
 import java.util.List;
 
 public class UserResponseDTO {

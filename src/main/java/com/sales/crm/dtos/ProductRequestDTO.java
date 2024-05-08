@@ -1,6 +1,9 @@
 package com.sales.crm.dtos;
 
+import jakarta.validation.constraints.NotNull;
+
 public class ProductRequestDTO {
+    @NotNull(message = "Product code cannot be null")
     private String productCode;
 
     private String description;
@@ -15,7 +18,10 @@ public class ProductRequestDTO {
 
     private Long supplierId;
 
-    public ProductRequestDTO(String productCode, String description, Double buyingPrice, Boolean isSpecialProduct, Double sellingMargin, Integer stockNumber, Long categoryId, Long supplierId) {
+    public ProductRequestDTO() {
+    }
+
+    public ProductRequestDTO(String productCode, String description, Double buyingPrice, Boolean isSpecialProduct, Integer stockNumber, Long categoryId, Long supplierId) {
         this.productCode = productCode;
         this.description = description;
         this.buyingPrice = buyingPrice;
@@ -49,14 +55,13 @@ public class ProductRequestDTO {
         this.buyingPrice = buyingPrice;
     }
 
-    public Boolean isSpecialProduct() {
+    public Boolean getSpecialProduct() {
         return isSpecialProduct;
     }
 
     public void setSpecialProduct(Boolean specialProduct) {
         isSpecialProduct = specialProduct;
     }
-
 
     public Integer getStockNumber() {
         return stockNumber;

@@ -1,6 +1,5 @@
 package com.sales.crm.dtos;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class QuotationResponseDTO {
@@ -12,9 +11,6 @@ public class QuotationResponseDTO {
 
     private String userName;
     private String clientName;
-
-
-
 
     public QuotationResponseDTO() {
     }

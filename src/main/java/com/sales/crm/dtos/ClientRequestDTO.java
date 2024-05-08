@@ -1,15 +1,21 @@
 package com.sales.crm.dtos;
 
 
-//
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
+
 public class ClientRequestDTO {
     private String name;
-
-
+    @Pattern(regexp = "\\d{10}", message = "Phone number must be 10 digits")
     private String phoneNumber;
+
+    @Email(message = "Invalid email address")
     private String email;
     private String address;
     private Long userId;
+
+    public ClientRequestDTO() {
+    }
 
     public ClientRequestDTO(String name, String phoneNumber, String email, String address, Long userId) {
         this.name = name;
@@ -57,9 +63,5 @@ public class ClientRequestDTO {
 
     public void setUserId(Long userId) {
         this.userId = userId;
-    }
-
-    public static class OrderResponseDTO {
-
     }
 }

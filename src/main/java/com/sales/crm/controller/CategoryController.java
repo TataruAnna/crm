@@ -1,5 +1,6 @@
 package com.sales.crm.controller;
 
+import com.sales.crm.dtos.CategoryDTO;
 import com.sales.crm.model.Category;
 import com.sales.crm.service.CategoryService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,9 +23,9 @@ public class CategoryController {
 
     //TODO de acceptat ca paremetru un CategoryRequestDTO in loc de Category
     @PostMapping("/add")
-    public ResponseEntity<Category> addCategory (@RequestBody Category category){
-        Category newCategory = categoryService.addCategory(category);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newCategory);
+    public ResponseEntity<CategoryDTO> addCategory (@RequestBody CategoryDTO categoryDTO){
+        CategoryDTO newCategoryDTO = categoryService.addCategory(categoryDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(categoryDTO);
 
     }
     @PostMapping("/update")

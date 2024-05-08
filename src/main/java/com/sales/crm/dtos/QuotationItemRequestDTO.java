@@ -5,6 +5,9 @@ public class QuotationItemRequestDTO {
     private Long productId;
     private Long quotationId;
 
+    public QuotationItemRequestDTO() {
+    }
+
     public QuotationItemRequestDTO(Double quantity, Long productId, Long quotationId) {
         this.quantity = quantity;
         this.productId = productId;

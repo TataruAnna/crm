@@ -1,5 +1,7 @@
 package com.sales.crm.service;
 
+import com.sales.crm.MapperService.CategoryMapper;
+import com.sales.crm.dtos.CategoryDTO;
 import com.sales.crm.exceptions.ResourceNotFoundException;
 import com.sales.crm.model.Category;
 import com.sales.crm.repository.CategoryRepository;
@@ -12,14 +14,17 @@ import java.util.List;
 @Service
 public class CategoryService {
     private CategoryRepository categoryRepository;
+    private CategoryMapper categoryMapper;
     @Autowired
-    public CategoryService(CategoryRepository categoryRepository) {
+    public CategoryService(CategoryRepository categoryRepository, CategoryMapper categoryMapper) {
         this.categoryRepository = categoryRepository;
+        this.categoryMapper = categoryMapper;
     }
 
     @Transactional
-    public Category addCategory(Category category) {
-        return categoryRepository.save(category);
+    public CategoryDTO addCategory(CategoryDTO categoryDTO) {
+        categoryRepository.save(categoryMapper.mapFromDTOToCategory(categoryDTO));
+        return categoryDTO;
     }
     @Transactional
     public Category updateCategory(String name, Category category){

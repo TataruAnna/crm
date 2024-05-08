@@ -24,11 +24,12 @@ public class QuotationMapper {
     public QuotationResponseDTO mapFromQuotationToDTOResponse(Quotation quotation){
         QuotationResponseDTO quotationResponseDTO = new QuotationResponseDTO();
         quotationResponseDTO.setClientName(quotation.getClient().getName());
+        quotationResponseDTO.setName(quotation.getName());
         quotationResponseDTO.setSellingMargin(quotation.getSellingMargin());
         quotationResponseDTO.setTotalPrice(quotation.getTotalPrice());
         quotationResponseDTO.setDateCreated(quotation.getDateCreated());
         quotationResponseDTO.setUserName(quotation.getUser().getName());
-        quotationResponseDTO.setClientName(quotation.getClient().getName());
+
         return quotationResponseDTO;
 
 

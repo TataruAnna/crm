@@ -1,16 +1,14 @@
 package com.sales.crm.dtos;
 
+import jakarta.validation.constraints.NotNull;
+
 public class AuthRequestDTO {
 
+    @NotNull(message = "Name cannot be null")
     private String username;
-    private String password;
-    private String email;
 
-    public AuthRequestDTO(String username, String password, String email) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-    }
+    @NotNull(message = "Password cannot be null")
+    private String password;
 
     public String getUsername() {
         return username;
@@ -28,11 +26,11 @@ public class AuthRequestDTO {
         this.password = password;
     }
 
-    public String getEmail() {
-        return email;
+    public AuthRequestDTO(String username, String password) {
+        this.username = username;
+        this.password = password;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public AuthRequestDTO() {
     }
 }

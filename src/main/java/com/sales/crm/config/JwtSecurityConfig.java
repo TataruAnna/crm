@@ -60,6 +60,7 @@ public class JwtSecurityConfig {
                                 .requestMatchers("/product").hasRole("ADMIN")
                                 .requestMatchers("/quotation/**").permitAll()
                                 .requestMatchers("/quotationItem").permitAll()
+                                .requestMatchers("/meeting").permitAll()
                                 .requestMatchers(AUTH_WHITELIST).permitAll()
                                 .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

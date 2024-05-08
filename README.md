@@ -20,6 +20,8 @@ designed to enhance client management across various departments, adressing spec
 ## Features
 
 As a sales user, I can:
+- Add a client to your portfolio 
+- 
 
 As a technical user, I can: 
 
@@ -30,7 +32,12 @@ As a production user, I can:
 As an admin, I can:
 - Add a user 
 - Give a role to a user 
-- 
+- Activate or deactivate other users 
+- Create a category of products 
+- Add products 
+- Change category for a product
+- Remove a category 
+- Remove a product
 
 
 

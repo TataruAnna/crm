@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -94,6 +95,9 @@ public class Order {
     }
 
     public Set<User> getUsers() {
+        if(users == null ){
+            users = new HashSet<>();
+        }
         return users;
     }
 
@@ -105,6 +109,9 @@ public class Order {
     }
 
     public List<Quotation> getQuotations() {
+        if(quotations == null){
+            quotations = new ArrayList<>();
+        }
         return quotations;
     }
 
@@ -113,6 +120,9 @@ public class Order {
     }
 
     public List<OrderObservation> getOrderObservations() {
+        if(orderObservations == null){
+            orderObservations = new ArrayList<>();
+        }
         return orderObservations;
     }
 

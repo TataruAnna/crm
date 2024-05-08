@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -119,6 +120,9 @@ public class Product {
     }
 
     public List<QuotationItem> getQuotationItems() {
+        if(quotationItems == null){
+            quotationItems = new ArrayList<>();
+        }
         return quotationItems;
     }
 

@@ -1,5 +1,6 @@
 package com.sales.crm.dtos;
 
+
 public class ClientSimpleResponseDTO {
     private String name;
     private String userName;

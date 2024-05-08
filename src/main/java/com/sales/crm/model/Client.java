@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -104,6 +105,9 @@ public class Client {
     }
 
     public List<Quotation> getQuotations() {
+        if(quotations == null){
+            quotations =new ArrayList<>();
+        }
         return quotations;
     }
 
@@ -112,6 +116,9 @@ public class Client {
     }
 
     public List<Order> getOrders() {
+        if(orders == null){
+            orders = new ArrayList<>();
+        }
         return orders;
     }
 
@@ -120,6 +127,9 @@ public class Client {
     }
 
     public List<Meeting> getMeetings() {
+        if(meetings == null){
+            meetings = new ArrayList<>();
+        }
         return meetings;
     }
 

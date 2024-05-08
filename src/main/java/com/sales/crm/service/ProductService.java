@@ -33,7 +33,7 @@ public class ProductService {
         newProduct.setProductCode(productRequestDTO.getProductCode());
         newProduct.setDescription(productRequestDTO.getDescription());
         newProduct.setBuyingPrice(productRequestDTO.getBuyingPrice());
-        newProduct.setSpecialProduct(productRequestDTO.isSpecialProduct());
+        newProduct.setSpecialProduct(productRequestDTO.getSpecialProduct());
         newProduct.setStockNumber(productRequestDTO.getStockNumber());
         if(newProduct.getStockNumber()==null){
             newProduct.setStockNumber(1);
